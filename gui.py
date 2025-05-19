@@ -24,7 +24,7 @@ def start_scan():
     target = target_box.get()
     append_output("Scan Started......\nPlease Wait for Results\n") 
     start_btn.config(state=tk.DISABLED)
-    run_scan(target, handle_scan_result)
+    run_scan(target,selected.get(), handle_scan_result)
     
     
 
@@ -40,6 +40,11 @@ target_label=tk.Label(top_frame,text="Target:")
 target_label.pack(side=tk.LEFT)
 target_box=tk.Entry(top_frame,width=30)
 target_box.pack(side=tk.LEFT,padx=10)
+
+modes=["-sS","-sT","-O"]
+selected=tk.StringVar(value="-sS")
+options_menu=tk.OptionMenu(top_frame,selected,*modes)
+options_menu.pack(side=tk.LEFT,padx=10)
 start_btn=tk.Button(top_frame,text="Start",command=start_scan)
 start_btn.pack(side=tk.LEFT, padx=10)
 output=scrolledtext.ScrolledText(root,wrap=tk.WORD)
