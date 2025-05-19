@@ -17,10 +17,16 @@ def clear():
     
 def handle_scan_result(result):
     append_output(f'Scan complete: {result}')
+    start_btn.config(state=tk.NORMAL)
 
 def start_scan():
+    clear()
     target = target_box.get()
+    append_output("Scan Started......\nPlease Wait for Results\n") 
+    start_btn.config(state=tk.DISABLED)
     run_scan(target, handle_scan_result)
+    
+    
 
 
 
