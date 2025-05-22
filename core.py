@@ -1,11 +1,11 @@
 import nmap
 import threading
 
-def run_scan(target,args, speed,callback):
+def run_scan(target,args,port_start,port_end, speed,callback):
     def task():
         try:
             scan = nmap.PortScanner()
-            result = scan.scan(target, '21-443' ,arguments=args+ " " +speed)
+            result = scan.scan(target, f'{port_start}-{port_end}' ,arguments=f'{args} {speed}')
         except Exception as e:
             result = e
         
@@ -19,7 +19,7 @@ def format_scan_result(result):
     try:
         hosts = result.get('scan', {})
     except Exception as e:
-            return e
+            return f'Error: {e}'
     
     for host, info in hosts.items():
         state = info.get('status', {}).get('state', 'unknown')

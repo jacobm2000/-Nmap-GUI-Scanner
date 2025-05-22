@@ -6,6 +6,7 @@ A lightweight Python-based GUI frontend for Nmap that allows users to perform cu
 
 - GUI built with `tkinter`
 - Supports popular Nmap scan modes (`-sS`, `-sT`, `-O`, etc.)
+- Input port range
 - Choose scan speed using Nmap timing templates (`-T0` to `-T5`)
 - Displays formatted scan results
 - Threads scanning in the background to prevent GUI freezing
