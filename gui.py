@@ -20,11 +20,19 @@ def handle_scan_result(result):
     end_time=time.time()
     total_time=round(end_time-start_time,2)
     append_output(f'\nTotal time elapsed: {total_time} seconds \n')
-    append_output(f'Scan complete: {result}')
+    append_output(f'Scan complete:\n {result}')
     start_btn.config(state=tk.NORMAL)
    
-    
-
+#This function hides the port options when -sn is selected and returns them when it is not selected
+def mode_change(*args):
+    if selected_mode.get()=='-sn':
+        port_frame.pack_forget()
+       
+    else:
+        output.pack_forget()
+        port_frame.pack()
+        output.pack(pady=20)
+        
 def start_scan():
     clear()
     global start_time
@@ -42,25 +50,31 @@ end_time=0.0
 root = tk.Tk()
 root.title("NMAP")
 root.geometry("750x600")
-
 top_frame=tk.Frame(root)
 top_frame.pack(pady=10)
 target_label=tk.Label(top_frame,text="Target:")
 target_label.pack(side=tk.LEFT)
 target_box=tk.Entry(top_frame,width=30)
 target_box.pack(side=tk.LEFT,padx=10)
-port_start_label=tk.Label(top_frame,text="Port range start")
+modes=["-sS","-sn","-sT","-O","-A"]
+selected_mode=tk.StringVar(value="-sS")
+selected_mode.trace_add("write", mode_change)
+type_menu=tk.OptionMenu(top_frame,selected_mode,*modes)
+
+port_frame=tk.Frame(root)
+port_frame.pack(pady=5)
+port_start_label=tk.Label(port_frame,text="Port range start")
 port_start_label.pack(side=tk.LEFT)
-port_start=tk.Entry(top_frame,width=5)
+port_start=tk.Entry(port_frame,width=5)
 port_start.pack(side=tk.LEFT,padx=10)
-port_end_label=tk.Label(top_frame,text="Port range end")
+port_start.insert(0,21)
+port_end_label=tk.Label(port_frame,text="Port range end")
 port_end_label.pack(side=tk.LEFT)
-port_end=tk.Entry(top_frame,width=5)
+port_end=tk.Entry(port_frame,width=5)
+port_end.insert(0,443)
 port_end.pack(side=tk.LEFT,padx=10)
 
-modes=["-sS","-sT","-O","-A"]
-selected_mode=tk.StringVar(value="-sS")
-type_menu=tk.OptionMenu(top_frame,selected_mode,*modes)
+
 type_menu.pack(side=tk.LEFT,padx=10)
 
 speeds=["-T5","-T4","-T3","-T2","-T1","-T0"]

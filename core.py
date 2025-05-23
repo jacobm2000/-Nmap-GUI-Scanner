@@ -4,18 +4,37 @@ import threading
 def run_scan(target,args,port_start,port_end, speed,callback):
     def task():
         try:
+          
             scan = nmap.PortScanner()
-            result = scan.scan(target, f'{port_start}-{port_end}' ,arguments=f'{args} {speed}')
+            if args=='-sn':
+                result = scan.scan(target,arguments=f'{args} {speed}')
+            else:
+                result = scan.scan(target, f'{port_start}-{port_end}' ,arguments=f'{args} {speed}')
         except Exception as e:
-            result = e
+            result = f'Error: {e}'
         
         callback(format_scan_result(result))
-
+    
     threading.Thread(target=task).start()
     
     
 def format_scan_result(result):
     output = []
+    # This line checks if result is a string and if it is returns it.
+    # this occurs when it an exeption pops up causing run_san to return the error as a string
+    if isinstance(result,str):
+        return result
+    
+    try:
+        scaninfo = result['nmap'].get('scaninfo', {})
+        errors = scaninfo.get('error', None)
+        if errors:
+            for err in errors:
+                output.append(f'Error: {err.strip()}')
+            return "\n".join(output)
+    except Exception as e:
+            return f'Error: {e}'
+        
     try:
         hosts = result.get('scan', {})
     except Exception as e:
