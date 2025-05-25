@@ -56,7 +56,7 @@ target_label=tk.Label(top_frame,text="Target:")
 target_label.pack(side=tk.LEFT)
 target_box=tk.Entry(top_frame,width=30)
 target_box.pack(side=tk.LEFT,padx=10)
-modes=["-sS","-sn","-sT","-O","-A"]
+modes=["-sS","-sn","-sT","-sU","-sV","-O","-A"]
 selected_mode=tk.StringVar(value="-sS")
 selected_mode.trace_add("write", mode_change)
 type_menu=tk.OptionMenu(top_frame,selected_mode,*modes)
