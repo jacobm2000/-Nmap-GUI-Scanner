@@ -23,8 +23,12 @@ def handle_scan_result(result):
     append_output(f'Scan complete:\n {result}')
     start_btn.config(state=tk.NORMAL)
    
-#This function hides the port options when -sn is selected and returns them when it is not selected
-def mode_change(*args):
+"""This function changes the command entry box to match the Args selcted by users. 
+Also it disables port input for no port scan"""
+def select_change(*args):
+    
+    args_entry.delete(0, tk.END)
+    args_entry.insert(tk.END,selected_mode.get()+ " " +selected_speed.get())
     if selected_mode.get()=='-sn':
         port_frame.pack_forget()
        
@@ -40,7 +44,7 @@ def start_scan():
     target = target_box.get()
     append_output("Scan Started......\nPlease Wait for Results\n") 
     start_btn.config(state=tk.DISABLED)
-    run_scan(target,selected_mode.get(),port_start.get(),port_end.get(),selected_speed.get(), handle_scan_result)
+    run_scan(target,args_entry.get(),port_start.get(),port_end.get(), handle_scan_result)
     
     
 
@@ -58,8 +62,15 @@ target_box=tk.Entry(top_frame,width=30)
 target_box.pack(side=tk.LEFT,padx=10)
 modes=["-sS","-sn","-sT","-sU","-sV","-O","-A"]
 selected_mode=tk.StringVar(value="-sS")
-selected_mode.trace_add("write", mode_change)
+selected_mode.trace_add("write", select_change)
 type_menu=tk.OptionMenu(top_frame,selected_mode,*modes)
+
+args_frame=tk.Frame(root)
+args_frame.pack(pady=5)
+args_label=tk.Label(args_frame,text="Arguments:")
+args_label.pack(side=tk.LEFT,padx=5)
+args_entry=tk.Entry(args_frame,width=30)
+args_entry.pack(side=tk.LEFT,padx=5)
 
 port_frame=tk.Frame(root)
 port_frame.pack(pady=5)
@@ -79,8 +90,11 @@ type_menu.pack(side=tk.LEFT,padx=10)
 
 speeds=["-T5","-T4","-T3","-T2","-T1","-T0"]
 selected_speed=tk.StringVar(value="-T4")
+selected_speed.trace_add("write",select_change)
 speed_menu=tk.OptionMenu(top_frame,selected_speed,*speeds)
 speed_menu.pack(side=tk.LEFT,padx=10)
+
+args_entry.insert(tk.END,"-sS -T4")
 
 start_btn=tk.Button(top_frame,text="Start",command=start_scan)
 start_btn.pack(side=tk.LEFT, padx=10)

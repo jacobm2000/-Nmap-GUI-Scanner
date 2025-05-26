@@ -1,15 +1,15 @@
 import nmap
 import threading
 
-def run_scan(target,args,port_start,port_end, speed,callback):
+def run_scan(target,args,port_start,port_end,callback):
     def task():
         try:
           
             scan = nmap.PortScanner()
             if args=='-sn':
-                result = scan.scan(target,arguments=f'{args} {speed}')
+                result = scan.scan(target,arguments=args)
             else:
-                result = scan.scan(target, f'{port_start}-{port_end}' ,arguments=f'{args} {speed}')
+                result = scan.scan(target, f'{port_start}-{port_end}' ,arguments=args)
         except Exception as e:
             result = f'Error: {e}'
         
