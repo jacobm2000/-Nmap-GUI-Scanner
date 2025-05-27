@@ -28,11 +28,11 @@ Also it disables port input for no port scan"""
 def select_change(*args):
     
     args_entry.delete(0, tk.END)
-    args_entry.insert(tk.END,selected_mode.get()+ " " +selected_speed.get())
     if selected_mode.get()=='-sn':
         port_frame.pack_forget()
-       
+        args_entry.insert(tk.END,selected_mode.get())
     else:
+        args_entry.insert(tk.END,selected_mode.get()+ " " +selected_speed.get())
         output.pack_forget()
         port_frame.pack()
         output.pack(pady=20)
