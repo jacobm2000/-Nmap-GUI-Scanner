@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import scrolledtext
+from tkinter import scrolledtext, filedialog
 import time
 from core import run_scan
 
@@ -22,7 +22,22 @@ def handle_scan_result(result):
     append_output(f'\nTotal time elapsed: {total_time} seconds \n')
     append_output(f'Scan complete:\n {result}')
     start_btn.config(state=tk.NORMAL)
-   
+
+def save_output():
+    text = output.get("1.0", tk.END).strip()
+    if text=="":
+        tk.messagebox.showinfo("Error", "Output is empty")
+        return
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+    )
+    
+    
+    if file_path:
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(text)
+
 """This function changes the command entry box to match the Args selcted by users. 
 Also it disables port input for no port scan"""
 def select_change(*args):
@@ -34,8 +49,10 @@ def select_change(*args):
     else:
         args_entry.insert(tk.END,selected_mode.get()+ " " +selected_speed.get())
         output.pack_forget()
+        save_btn.pack_forget()
         port_frame.pack()
         output.pack(pady=20)
+        save_btn.pack()
         
 def start_scan():
     clear()
@@ -101,4 +118,6 @@ start_btn.pack(side=tk.LEFT, padx=10)
 output=scrolledtext.ScrolledText(root,wrap=tk.WORD)
 output.config(state='disabled')
 output.pack(pady=20)
+save_btn = tk.Button(root, text="Save", command=save_output)
+save_btn.pack( pady=2)
 root.mainloop()
